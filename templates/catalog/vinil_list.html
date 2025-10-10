@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Minha Coleção{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Minha Coleção de Vinis</h1>
+    <a href="{% url 'catalog:vinil_create' %}" class="btn btn-primary">Adicionar Novo Disco</a>
+</div>
+
+<div class="row">
+    {% for vinil in vinis %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if vinil.imagem_capa %}
+                <img src="{{ vinil.imagem_capa.url }}" class="card-img-top" alt="{{ vinil.titulo }}">
+            {% else %}
+                <div class="d-flex justify-content-center align-items-center card-img-top bg-secondary text-white" style="height: 300px;">
+                    <span>Sem Imagem</span>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ vinil.titulo }}</h5>
+                <p class="card-text">{{ vinil.artista }} ({{ vinil.ano_lancamento }})</p>
+                <a href="{% url 'catalog:vinil_detail' vinil.pk %}" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col">
+        <p>Nenhum disco na sua coleção ainda. <a href="{% url 'catalog:vinil_create' %}">Adicione o primeiro!</a></p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
