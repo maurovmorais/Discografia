@@ -4,9 +4,32 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Minha Coleção de Vinis</h1>
+    <div class="d-flex align-items-center">
+        <h1 class="mb-0">Minha Coleção de Vinis</h1>
+        <span class="badge bg-secondary ms-3">{{ total_vinis }}</span>
+    </div>
     <a href="{% url 'catalog:vinil_create' %}" class="btn btn-primary">Adicionar Novo Disco</a>
 </div>
+
+<!-- Formulário de Filtro -->
+<form method="get" class="mb-4" id="filter-form">
+    <div class="row">
+        <div class="col-md-4">
+            <select name="artista" class="form-control" id="artista-filter">
+                <option value="">Todos os Artistas</option>
+                {% for artista in artistas %}
+                    <option value="{{ artista }}" {% if request.GET.artista == artista %}selected{% endif %}>{{ artista }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="titulo" class="form-control" id="titulo-filter" placeholder="Filtrar por Título..." value="{{ request.GET.titulo }}">
+        </div>
+        <div class="col-md-4">
+            <input type="number" name="ano" class="form-control" id="ano-filter" placeholder="Filtrar por Ano..." value="{{ request.GET.ano }}">
+        </div>
+    </div>
+</form>
 
 <div class="row">
     {% for vinil in vinis %}
@@ -32,4 +55,32 @@
     </div>
     {% endfor %}
 </div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterForm = document.getElementById('filter-form');
+        const artistaFilter = document.getElementById('artista-filter');
+        const tituloFilter = document.getElementById('titulo-filter');
+        const anoFilter = document.getElementById('ano-filter');
+
+        artistaFilter.addEventListener('change', function() {
+            filterForm.submit();
+        });
+
+        tituloFilter.addEventListener('keyup', function() {
+            filterForm.submit();
+        });
+
+        anoFilter.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                filterForm.submit();
+            }
+        });
+        anoFilter.addEventListener('change', function() {
+            filterForm.submit();
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}

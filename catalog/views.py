@@ -19,7 +19,28 @@ class VinilListView(LoginRequiredMixin, ListView):
     context_object_name = 'vinis'
 
     def get_queryset(self):
-        return Vinil.objects.filter(usuario=self.request.user)
+        queryset = Vinil.objects.filter(usuario=self.request.user)
+        
+        # Filtrando os resultados
+        artista = self.request.GET.get('artista')
+        titulo = self.request.GET.get('titulo')
+        ano = self.request.GET.get('ano')
+        
+        if artista:
+            queryset = queryset.filter(artista=artista)
+        if titulo:
+            queryset = queryset.filter(titulo__icontains=titulo)
+        if ano:
+            queryset = queryset.filter(ano_lancamento=ano)
+            
+        return queryset.order_by('artista')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_vinis = Vinil.objects.filter(usuario=self.request.user)
+        context['artistas'] = user_vinis.values_list('artista', flat=True).distinct()
+        context['total_vinis'] = user_vinis.count()
+        return context
 
 class VinilDetailView(LoginRequiredMixin, DetailView):
     model = Vinil
