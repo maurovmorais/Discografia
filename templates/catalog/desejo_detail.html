@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ desejo.titulo }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        {% if desejo.imagem_capa %}
+            <img src="{{ desejo.imagem_capa.url }}" class="img-fluid rounded" alt="{{ desejo.titulo }}">
+        {% else %}
+            <div class="d-flex justify-content-center align-items-center rounded bg-secondary text-white" style="height: 400px;">
+                <span>Sem Imagem</span>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <h1>{{ desejo.titulo }}</h1>
+        <h3>{{ desejo.artista }}</h3>
+        {% if desejo.ano_lancamento %}
+            <p class="text-muted">Lançado em: {{ desejo.ano_lancamento }}</p>
+        {% endif %}
+        <hr>
+        <h4>Descrição</h4>
+        <p>{{ desejo.descricao|linebreaksbr }}</p>
+        <hr>
+        <a href="{% url 'catalog:desejo_update' desejo.pk %}" class="btn btn-warning">Editar</a>
+        <a href="{% url 'catalog:transfer_desejo' desejo.pk %}" class="btn btn-success">Mover para Coleção</a>
+        <a href="{% url 'catalog:desejo_delete' desejo.pk %}" class="btn btn-danger">Excluir</a>
+        <a href="{% url 'catalog:desejo_list' %}" class="btn btn-secondary">Voltar para a Lista de Desejos</a>
+    </div>
+</div>
+{% endblock %}

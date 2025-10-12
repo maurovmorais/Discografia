@@ -10,4 +10,10 @@ urlpatterns = [
     path('vinil/<int:pk>/editar/', views.VinilUpdateView.as_view(), name='vinil_update'),
     path('vinil/<int:pk>/excluir/', views.VinilDeleteView.as_view(), name='vinil_delete'),
     path('signup/', views.SignUpView.as_view(), name='signup'),
+    path('desejos/', views.DesejoListView.as_view(), name='desejo_list'),
+    path('desejo/<int:pk>/', views.DesejoDetailView.as_view(), name='desejo_detail'),
+    path('desejo/novo/', views.DesejoCreateView.as_view(), name='desejo_create'),
+    path('desejo/<int:pk>/editar/', views.DesejoUpdateView.as_view(), name='desejo_update'),
+    path('desejo/<int:pk>/excluir/', views.DesejoDeleteView.as_view(), name='desejo_delete'),
+    path('desejo/<int:pk>/transferir/', views.transfer_desejo, name='transfer_desejo'),
 ]

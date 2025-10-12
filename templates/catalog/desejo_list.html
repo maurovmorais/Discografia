@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Desejos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center">
+        <h1 class="mb-0">Minha Lista de Desejos</h1>
+        <span class="badge bg-secondary ms-3">{{ desejos.count }}</span>
+    </div>
+    <a href="{% url 'catalog:desejo_create' %}" class="btn btn-primary">Adicionar Novo Desejo</a>
+</div>
+
+<div class="row">
+    {% for desejo in desejos %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if desejo.imagem_capa %}
+                <img src="{{ desejo.imagem_capa.url }}" class="card-img-top" alt="{{ desejo.titulo }}">
+            {% else %}
+                <div class="d-flex justify-content-center align-items-center card-img-top bg-secondary text-white" style="height: 300px;">
+                    <span>Sem Imagem</span>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ desejo.titulo }}</h5>
+                <p class="card-text">{{ desejo.artista }} {% if desejo.ano_lancamento %}({{ desejo.ano_lancamento }}){% endif %}</p>
+                <a href="{% url 'catalog:desejo_detail' desejo.pk %}" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col">
+        <p>Nenhum item na sua lista de desejos ainda. <a href="{% url 'catalog:desejo_create' %}">Adicione o primeiro!</a></p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -3,7 +3,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
-from .models import Vinil
+from .models import Vinil, Desejo
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def transfer_desejo(request, pk):
+    desejo = get_object_or_404(Desejo, pk=pk, usuario=request.user)
+    
+    # Create a new Vinil object
+    Vinil.objects.create(
+        titulo=desejo.titulo,
+        artista=desejo.artista,
+        ano_lancamento=desejo.ano_lancamento,
+        descricao=desejo.descricao,
+        imagem_capa=desejo.imagem_capa,
+        usuario=request.user
+    )
+    
+    # Delete the Desejo object
+    desejo.delete()
+    
+    return redirect('catalog:vinil_list')
 
 class SignUpView(FormView):
     template_name = 'registration/signup.html'
@@ -64,3 +85,38 @@ class VinilDeleteView(LoginRequiredMixin, DeleteView):
     model = Vinil
     context_object_name = 'vinil'
     success_url = reverse_lazy('catalog:vinil_list')
+
+class DesejoListView(LoginRequiredMixin, ListView):
+    model = Desejo
+    context_object_name = 'desejos'
+    template_name = 'catalog/desejo_list.html'
+
+    def get_queryset(self):
+        return Desejo.objects.filter(usuario=self.request.user).order_by('artista')
+
+class DesejoDetailView(LoginRequiredMixin, DetailView):
+    model = Desejo
+    context_object_name = 'desejo'
+    template_name = 'catalog/desejo_detail.html'
+
+class DesejoCreateView(LoginRequiredMixin, CreateView):
+    model = Desejo
+    fields = ['titulo', 'artista', 'ano_lancamento', 'descricao', 'imagem_capa']
+    template_name = 'catalog/desejo_form.html'
+    success_url = reverse_lazy('catalog:desejo_list')
+
+    def form_valid(self, form):
+        form.instance.usuario = self.request.user
+        return super().form_valid(form)
+
+class DesejoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Desejo
+    fields = ['titulo', 'artista', 'ano_lancamento', 'descricao', 'imagem_capa']
+    template_name = 'catalog/desejo_form.html'
+    success_url = reverse_lazy('catalog:desejo_list')
+
+class DesejoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Desejo
+    context_object_name = 'desejo'
+    template_name = 'catalog/desejo_confirm_delete.html'
+    success_url = reverse_lazy('catalog:desejo_list')
