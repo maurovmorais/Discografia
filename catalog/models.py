@@ -14,6 +14,7 @@ class Vinil(models.Model):
     descricao = models.TextField(blank=True, null=True)
     imagem_capa = models.ImageField(upload_to='capas/', blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    para_troca = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.titulo} - {self.artista}"

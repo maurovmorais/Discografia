@@ -26,6 +26,14 @@ def transfer_desejo(request, pk):
     
     return redirect('catalog:vinil_list')
 
+@login_required
+def toggle_troca(request, pk):
+    vinil = get_object_or_404(Vinil, pk=pk, usuario=request.user)
+    if request.method == 'POST':
+        vinil.para_troca = not vinil.para_troca
+        vinil.save()
+    return redirect('catalog:vinil_list')
+
 class SignUpView(FormView):
     template_name = 'registration/signup.html'
     form_class = UserCreationForm
@@ -81,10 +89,16 @@ class VinilUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['titulo', 'artista', 'ano_lancamento', 'descricao', 'imagem_capa']
     success_url = reverse_lazy('catalog:vinil_list')
 
+    def get_queryset(self):
+        return Vinil.objects.filter(usuario=self.request.user)
+
 class VinilDeleteView(LoginRequiredMixin, DeleteView):
     model = Vinil
     context_object_name = 'vinil'
     success_url = reverse_lazy('catalog:vinil_list')
+
+    def get_queryset(self):
+        return Vinil.objects.filter(usuario=self.request.user)
 
 class DesejoListView(LoginRequiredMixin, ListView):
     model = Desejo
@@ -120,3 +134,11 @@ class DesejoDeleteView(LoginRequiredMixin, DeleteView):
     context_object_name = 'desejo'
     template_name = 'catalog/desejo_confirm_delete.html'
     success_url = reverse_lazy('catalog:desejo_list')
+
+class TrocaListView(ListView):
+    model = Vinil
+    context_object_name = 'vinis_para_troca'
+    template_name = 'catalog/troca_list.html'
+
+    def get_queryset(self):
+        return Vinil.objects.filter(para_troca=True).order_by('artista')

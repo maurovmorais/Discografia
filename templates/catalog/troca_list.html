@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Vinis para Troca{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Vinis Disponíveis para Troca</h1>
+</div>
+
+<div class="row">
+    {% for vinil in vinis_para_troca %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if vinil.imagem_capa %}
+                <img src="{{ vinil.imagem_capa.url }}" class="card-img-top" alt="{{ vinil.titulo }}">
+            {% else %}
+                <div class="d-flex justify-content-center align-items-center card-img-top bg-secondary text-white" style="height: 300px;">
+                    <span>Sem Imagem</span>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ vinil.titulo }}</h5>
+                <p class="card-text">{{ vinil.artista }} ({{ vinil.ano_lancamento }})</p>
+                <p class="card-text">Proprietário: {{ vinil.usuario.username }}</p>
+                <a href="{% url 'catalog:vinil_detail' vinil.pk %}" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col">
+        <p>Nenhum vinil disponível para troca no momento.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
