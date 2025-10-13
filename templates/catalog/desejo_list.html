@@ -8,7 +8,9 @@
         <h1 class="mb-0">Minha Lista de Desejos</h1>
         <span class="badge bg-secondary ms-3">{{ desejos.count }}</span>
     </div>
-    <a href="{% url 'catalog:desejo_create' %}" class="btn btn-primary">Adicionar Novo Desejo</a>
+    <div class="d-grid" style="min-width: 220px;">
+        <a href="{% url 'catalog:desejo_create' %}" class="btn btn-primary">Adicionar Novo Desejo</a>
+    </div>
 </div>
 
 <div class="row">

@@ -8,7 +8,9 @@
         <h1 class="mb-0">Minha Coleção de Vinis</h1>
         <span class="badge bg-secondary ms-3">{{ total_vinis }}</span>
     </div>
-    <a href="{% url 'catalog:vinil_create' %}" class="btn btn-primary">Adicionar Novo Disco</a>
+    <div class="d-grid" style="min-width: 220px;">
+        <a href="{% url 'catalog:vinil_create' %}" class="btn btn-primary">Adicionar Novo Disco</a>
+    </div>
 </div>
 
 <!-- Formulário de Filtro -->
