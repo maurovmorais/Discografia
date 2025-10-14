@@ -16,7 +16,7 @@
 <!-- Formulário de Filtro -->
 <form method="get" class="mb-4" id="filter-form">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <select name="artista" class="form-control" id="artista-filter">
                 <option value="">Todos os Artistas</option>
                 {% for artista in artistas %}
@@ -24,11 +24,13 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-4">
-            <input type="text" name="titulo" class="form-control" id="titulo-filter" placeholder="Filtrar por Título..." value="{{ request.GET.titulo }}">
-        </div>
-        <div class="col-md-4">
-            <input type="number" name="ano" class="form-control" id="ano-filter" placeholder="Filtrar por Ano..." value="{{ request.GET.ano }}">
+        <div class="col-md-6">
+            <select name="ano" class="form-control" id="ano-filter">
+                <option value="">Todos os Anos</option>
+                {% for ano in anos %}
+                    <option value="{{ ano }}" {% if request.GET.ano == ano|stringformat:"s" %}selected{% endif %}>{{ ano }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 </form>
@@ -70,22 +72,12 @@
     document.addEventListener('DOMContentLoaded', function() {
         const filterForm = document.getElementById('filter-form');
         const artistaFilter = document.getElementById('artista-filter');
-        const tituloFilter = document.getElementById('titulo-filter');
         const anoFilter = document.getElementById('ano-filter');
 
         artistaFilter.addEventListener('change', function() {
             filterForm.submit();
         });
 
-        tituloFilter.addEventListener('keyup', function() {
-            filterForm.submit();
-        });
-
-        anoFilter.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                filterForm.submit();
-            }
-        });
         anoFilter.addEventListener('change', function() {
             filterForm.submit();
         });

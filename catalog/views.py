@@ -52,13 +52,10 @@ class VinilListView(LoginRequiredMixin, ListView):
         
         # Filtrando os resultados
         artista = self.request.GET.get('artista')
-        titulo = self.request.GET.get('titulo')
         ano = self.request.GET.get('ano')
         
         if artista:
             queryset = queryset.filter(artista=artista)
-        if titulo:
-            queryset = queryset.filter(titulo__icontains=titulo)
         if ano:
             queryset = queryset.filter(ano_lancamento=ano)
             
@@ -68,6 +65,7 @@ class VinilListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_vinis = Vinil.objects.filter(usuario=self.request.user)
         context['artistas'] = user_vinis.values_list('artista', flat=True).distinct()
+        context['anos'] = user_vinis.values_list('ano_lancamento', flat=True).distinct().order_by('ano_lancamento')
         context['total_vinis'] = user_vinis.count()
         return context
 
