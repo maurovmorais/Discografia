@@ -8,6 +8,15 @@ class Vinil(models.Model):
     """
     Representa um disco de vinil na coleção.
     """
+    CONSERVACAO_CHOICES = [
+        ('M', 'Mint (M)'),
+        ('NM', 'Near Mint (NM or M-)'),
+        ('VG+', 'Very Good Plus (VG+)'),
+        ('VG', 'Very Good (VG)'),
+        ('G+', 'Good Plus (G+)'),
+        ('G', 'Good (G)'),
+    ]
+
     titulo = models.CharField(max_length=200)
     artista = models.CharField(max_length=200)
     ano_lancamento = models.PositiveIntegerField()
@@ -15,6 +24,8 @@ class Vinil(models.Model):
     imagem_capa = models.ImageField(upload_to='capas/', blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     para_troca = models.BooleanField(default=False)
+    conservacao_disco = models.CharField(max_length=3, choices=CONSERVACAO_CHOICES, default='VG')
+    conservacao_capa = models.CharField(max_length=3, choices=CONSERVACAO_CHOICES, default='VG')
 
     def __str__(self):
         return f"{self.titulo} - {self.artista}"

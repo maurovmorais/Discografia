@@ -12,10 +12,63 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type-="submit" class="btn btn-primary">Salvar</button>
-                    <a href="{% url 'catalog:vinil_list' %}" class="btn btn-secondary">Cancelar</a>
+                    {{ form.non_field_errors }}
+                    <div class="mb-3">
+                        {{ form.titulo.label_tag }}
+                        {{ form.titulo }}
+                        {{ form.titulo.errors }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.artista.label_tag }}
+                        {{ form.artista }}
+                        {{ form.artista.errors }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.ano_lancamento.label_tag }}
+                        {{ form.ano_lancamento }}
+                        {{ form.ano_lancamento.errors }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.descricao.label_tag }}
+                        {{ form.descricao }}
+                        {{ form.descricao.errors }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.imagem_capa.label_tag }}
+                        {{ form.imagem_capa }}
+                        {{ form.imagem_capa.errors }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Conservação do Disco</h5>
+                            {{ form.conservacao_disco }}
+                            {{ form.conservacao_disco.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Conservação da Capa</h5>
+                            {{ form.conservacao_capa }}
+                            {{ form.conservacao_capa.errors }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+                    <a href="{% url 'catalog:vinil_list' %}" class="btn btn-secondary mt-3">Cancelar</a>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Guia de Conservação</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Mint (M):</strong> Disco nunca tocado, capa perfeita.</p>
+                <p><strong>Near Mint (NM):</strong> Disco quase perfeito, capa com mínimos sinais de desgaste.</p>
+                <p><strong>Very Good Plus (VG+):</strong> Pequenas marcas no disco, capa com pequenos desgastes.</p>
+                <p><strong>Very Good (VG):</strong> Marcas visíveis no disco, capa com desgaste normal.</p>
+                <p><strong>Good (G), Good Plus (G+):</strong> Disco muito desgastado, capa com possíveis rasgos ou escritas.</p>
             </div>
         </div>
     </div>

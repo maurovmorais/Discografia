@@ -5,7 +5,7 @@ from django.views.generic.edit import FormView
 from .models import Vinil, Desejo
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, VinilForm
 
 @login_required
 def transfer_desejo(request, pk):
@@ -75,7 +75,7 @@ class VinilDetailView(LoginRequiredMixin, DetailView):
 
 class VinilCreateView(LoginRequiredMixin, CreateView):
     model = Vinil
-    fields = ['titulo', 'artista', 'ano_lancamento', 'descricao', 'imagem_capa']
+    form_class = VinilForm
     success_url = reverse_lazy('catalog:vinil_list')
 
     def form_valid(self, form):
@@ -84,7 +84,7 @@ class VinilCreateView(LoginRequiredMixin, CreateView):
 
 class VinilUpdateView(LoginRequiredMixin, UpdateView):
     model = Vinil
-    fields = ['titulo', 'artista', 'ano_lancamento', 'descricao', 'imagem_capa']
+    form_class = VinilForm
     success_url = reverse_lazy('catalog:vinil_list')
 
     def get_queryset(self):

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model
+from .models import Vinil
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
@@ -48,3 +49,12 @@ class EmailAuthenticationForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
+
+class VinilForm(forms.ModelForm):
+    class Meta:
+        model = Vinil
+        fields = ['titulo', 'artista', 'ano_lancamento', 'descricao', 'imagem_capa', 'conservacao_disco', 'conservacao_capa']
+        widgets = {
+            'conservacao_disco': forms.RadioSelect,
+            'conservacao_capa': forms.RadioSelect,
+        }

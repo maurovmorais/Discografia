@@ -8,28 +8,47 @@
 </div>
 
 <div class="row">
-    {% for vinil in vinis_para_troca %}
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            {% if vinil.imagem_capa %}
-                <img src="{{ vinil.imagem_capa.url }}" class="card-img-top" alt="{{ vinil.titulo }}">
-            {% else %}
-                <div class="d-flex justify-content-center align-items-center card-img-top bg-secondary text-white" style="height: 300px;">
-                    <span>Sem Imagem</span>
+    <div class="col-md-8">
+        <div class="row">
+            {% for vinil in vinis_para_troca %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    {% if vinil.imagem_capa %}
+                        <img src="{{ vinil.imagem_capa.url }}" class="card-img-top" alt="{{ vinil.titulo }}">
+                    {% else %}
+                        <div class="d-flex justify-content-center align-items-center card-img-top bg-secondary text-white" style="height: 300px;">
+                            <span>Sem Imagem</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ vinil.titulo }}</h5>
+                        <p class="card-text">{{ vinil.artista }} ({{ vinil.ano_lancamento }})</p>
+                        <p class="card-text"><strong>Conservação:</strong> Disco ({{ vinil.get_conservacao_disco_display }}) - Capa ({{ vinil.get_conservacao_capa_display }})</p>
+                        <p class="card-text">Proprietário: {{ vinil.usuario.username }}</p>
+                        <a href="{% url 'catalog:vinil_detail' vinil.pk %}" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+                    </div>
                 </div>
-            {% endif %}
+            </div>
+            {% empty %}
+            <div class="col">
+                <p>Nenhum vinil disponível para troca no momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Guia de Conservação</h5>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{ vinil.titulo }}</h5>
-                <p class="card-text">{{ vinil.artista }} ({{ vinil.ano_lancamento }})</p>
-                <p class="card-text">Proprietário: {{ vinil.usuario.username }}</p>
-                <a href="{% url 'catalog:vinil_detail' vinil.pk %}" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+                <p><strong>1. Mint (M):</strong> Disco: Nunca foi tocado. Sem marcas, arranhões ou qualquer sinal de desgaste. Geralmente lacrado. Capa: Perfeita, sem desgaste, marcas, descolorações ou qualquer outro defeito. Geralmente lacrado.</p>
+                <p><strong>2. Near Mint (NM or M-):</strong> Disco: Foi tocado, mas muito bem cuidado. Quase imperceptíveis sinais de uso. Capa: Quase perfeita, com mínimos sinais de desgaste.</p>
+                <p><strong>3. Very Good Plus (VG+):</strong> Disco: Mostra sinais de ter sido tocado, mas bem cuidado. Pequenas marcas que não afetam a reprodução. Capa: Pequenos desgastes, mas ainda em bom estado.</p>
+                <p><strong>4. Very Good (VG):</strong> Disco: Bastante tocado, com marcas visíveis, mas que não interferem significativamente na qualidade sonora. Capa: Desgaste normal para a idade, possíveis marcas, dobras leves e descolorações.</p>
+                <p><strong>5. Good (G), Good Plus (G+):</strong> Disco: Muito desgastado, reprodução com ruídos de fundo, mas ainda tocável sem pular. Capa: Mais desgastada, com possíveis rasgos, escritas, manchas ou outras marcas.</p>
             </div>
         </div>
     </div>
-    {% empty %}
-    <div class="col">
-        <p>Nenhum vinil disponível para troca no momento.</p>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}
