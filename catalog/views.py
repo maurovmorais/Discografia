@@ -37,6 +37,11 @@ def toggle_troca(request, pk):
 class SignUpView(FormView):
     template_name = 'registration/signup.html'
     form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 class VinilListView(LoginRequiredMixin, ListView):
     model = Vinil
