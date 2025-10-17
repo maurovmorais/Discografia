@@ -133,4 +133,7 @@ LOGIN_URL = '/contas/login/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-
+AUTHENTICATION_BACKENDS = [
+    'catalog.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
