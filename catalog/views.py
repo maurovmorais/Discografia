@@ -1,4 +1,3 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -6,6 +5,7 @@ from django.views.generic.edit import FormView
 from .models import Vinil, Desejo
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from .forms import CustomUserCreationForm
 
 @login_required
 def transfer_desejo(request, pk):
@@ -36,12 +36,7 @@ def toggle_troca(request, pk):
 
 class SignUpView(FormView):
     template_name = 'registration/signup.html'
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+    form_class = CustomUserCreationForm
 
 class VinilListView(LoginRequiredMixin, ListView):
     model = Vinil
