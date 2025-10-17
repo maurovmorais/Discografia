@@ -7,10 +7,15 @@ class CustomUserCreationForm(UserCreationForm):
         required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control'})
     )
+    email2 = forms.EmailField(
+        label='Confirmação de e-mail',
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
 
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = UserCreationForm.Meta.fields + ('email',)
+        fields = UserCreationForm.Meta.fields + ('email', 'email2',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,6 +27,16 @@ class CustomUserCreationForm(UserCreationForm):
         if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError("Este email já está cadastrado.")
         return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        email2 = cleaned_data.get("email2")
+
+        if email and email2 and email != email2:
+            raise forms.ValidationError("Os e-mails não correspondem.")
+
+        return cleaned_data
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
